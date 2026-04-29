@@ -133,6 +133,8 @@ exports.Prisma.UserScalarFieldEnum = {
   hobbies: 'hobbies',
   password: 'password',
   role: 'role',
+  resetToken: 'resetToken',
+  resetTokenExpiry: 'resetTokenExpiry',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
