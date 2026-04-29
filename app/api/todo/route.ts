@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createTodo, getTodos } from '@/lib/services/todos.service';
+import { createTodo, getTodos } from '@/lib/services/todo.service';
 
 export async function GET() {
   const todos = await getTodos();
