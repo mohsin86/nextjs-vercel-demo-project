@@ -27,9 +27,9 @@ export default function TestAPIPage() {
 
       const data = await res.json();
       setResponse(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setResponse({
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Something went wrong',
       });
     }
   };

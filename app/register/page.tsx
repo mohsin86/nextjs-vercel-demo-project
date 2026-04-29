@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 type FormData = z.infer<typeof userRegisterSchema>;
 
-export default function ContactPage() {
+export default function RegisterPage() {
   const [success, setSuccess] = useState('');
 
   const {

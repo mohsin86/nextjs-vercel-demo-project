@@ -1,12 +1,19 @@
 export const revalidate = 60;
 
-async function getPosts() {
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
+
+async function getPosts(): Promise<Post[]> {
   const res = await fetch('https://jsonplaceholder.typicode.com/posts');
   return res.json();
 }
 
 export default async function ISRPage() {
-  const posts = await getPosts();
+  const posts: Post[] = await getPosts();
 
   return (
     <div>

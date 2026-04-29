@@ -27,6 +27,7 @@ export async function GET() {
       status: 200,
     });
   } catch (error) {
+    console.error('Error fetching data from external API:', error);
     return NextResponse.json(
       { error: 'Failed to fetch data from external API' },
       { status: 500 }

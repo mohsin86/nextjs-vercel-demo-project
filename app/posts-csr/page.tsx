@@ -4,8 +4,16 @@
 
 import { useEffect, useState } from 'react';
 
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
+
+
 export default function CSRPage() {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   console.log('Received data on server:', body);
   return NextResponse.json(
     {
-      message: 'User created',
+      message: 'Contact Send',
       data: body,
     },
     { status: 201 }

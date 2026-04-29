@@ -44,6 +44,7 @@ export default function LoginPage() {
       }, 500);
 
     } catch (err) {
+      console.error('Login error:', err);
       alert('Something went wrong');
     } finally {
       setLoading(false);

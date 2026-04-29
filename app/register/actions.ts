@@ -1,11 +1,11 @@
 'use server';
 
-import { contactSchema } from '@/lib/schema';
+import { userRegisterSchema } from '@/lib/schema';
 
 export type FormState = {
   success: string;
   errors: Record<string, string>;
-  data: any;
+  data: Record<string, unknown>;
 };
 
 export async function submitForm(prevState: FormState, formData: FormData) {
@@ -23,8 +23,8 @@ export async function submitForm(prevState: FormState, formData: FormData) {
 
   // 🔥 ZOD VALIDATION (SERVER SIDE)
 
-  const result = contactSchema.safeParse(rawData);
-
+  const result = userRegisterSchema.safeParse(rawData);
+  
   if (!result.success) {
     const fieldErrors: Record<string, string> = {};
 
