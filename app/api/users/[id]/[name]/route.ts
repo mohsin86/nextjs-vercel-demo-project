@@ -1,20 +1,13 @@
 // /api/users/:id/:name
 // for [id]/[name] → multiple dynamic params
 
-import { NextResponse } from 'next/server';
-
-type Params = {
-  params: {
-    id: string;
-    name: string;
-  };
-};
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
-  req: Request,
-  { params }: Params
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string; name: string }> }
 ) {
-  const { id, name } = params;
+  const { id, name } = await params;
 
   return NextResponse.json({
     message: 'User details fetched successfully',
