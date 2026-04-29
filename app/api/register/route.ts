@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 
-import { prisma } from '@/lib/prisma'
-import { userRegisterSchema } from '@/lib/userRegisterSchema';
+import { prisma } from '@/lib/db-instance/prisma'
+import { userRegisterSchema } from '@/lib/zod/userRegisterSchema';
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 

@@ -3,7 +3,7 @@
 import Navigation from '@/components/Navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { userRegisterSchema } from '@/lib/userRegisterSchema';
+import { userRegisterSchema } from '@/lib/zod/userRegisterSchema';
 import { z } from 'zod';
 import { useState } from 'react';
 
@@ -11,11 +11,13 @@ type FormData = z.infer<typeof userRegisterSchema>;
 
 export default function RegisterPage() {
   const [success, setSuccess] = useState('');
+  const [serverError, setServerError] = useState('');
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(userRegisterSchema),
@@ -32,20 +34,20 @@ export default function RegisterPage() {
     },
   });
 
-  const onSubmit = async (data: FormData) => {
+const onSubmit = async (data: FormData) => {
   try {
-    // 1️⃣ get short-lived JWT
     const tokenRes = await fetch('/api/auth/token');
     const { token } = await tokenRes.json();
 
-    // 2️⃣ submit form with JWT in header
+    const { confirmPassword, ...cleanData } = data; // not sending confirmPassword to API
+
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,  //  JWT in header
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(cleanData),
     });
 
     const result = await res.json();
@@ -55,6 +57,29 @@ export default function RegisterPage() {
       setSuccess(result.message);
     } else {
       setSuccess('');
+       setServerError(result.message); 
+
+      if (result.errors?.email) {
+        setError('email', {
+          type: 'server',
+          message: result.errors.email,
+        });
+      }
+
+      if (result.errors?.phone) {
+        setError('phone', {
+          type: 'server',
+          message: result.errors.phone,
+        });
+      }
+
+      Object.entries(result.errors || {}).forEach(([key, value]) => {
+        setError(key as keyof FormData, {
+          type: 'server',
+          message: value as string,
+        });
+      });
+
       console.error(result.message);
     }
   } catch (error) {
@@ -180,6 +205,31 @@ export default function RegisterPage() {
             </select>
 
             <p className="text-red-500 text-sm">{errors.jobType?.message}</p>
+            
+            {/* Password and confirm password */}
+            <div className="space-y-2">
+                <label>
+                  Password:
+                </label>
+                <input
+                  type="password"
+                  {...register('password')}
+                  placeholder="Password"
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+                <p className="text-red-500 text-sm">{errors.password?.message}</p>
+
+                <input
+                  type="password"
+                  {...register('confirmPassword')}
+                  placeholder="Confirm Password"
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+                <p className="text-red-500 text-sm">
+                  {errors.confirmPassword?.message}
+                </p>
+
+              </div>
 
             {/* BUTTON */}
             <button
@@ -189,10 +239,19 @@ export default function RegisterPage() {
               {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
 
+
+            
+
             {/* SUCCESS */}
             {success && (
               <p className="text-green-600 text-center font-medium">
                 {success}
+              </p>
+            )}
+
+            {serverError && (
+              <p className="text-red-600 text-center font-medium">
+                {serverError}
               </p>
             )}
 

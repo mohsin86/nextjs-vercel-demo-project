@@ -1,6 +1,6 @@
 'use server';
 
-import { userRegisterSchema } from '@/lib/userRegisterSchema';
+import { userRegisterSchema } from '@/lib/zod/userRegisterSchema';
 
 export type FormState = {
   success: string;
