@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
-import { prisma } from '@/lib/db-instance/prisma';
+import { prisma } from '@/lib/prisma';
 import nodemailer from 'nodemailer';
 
 
