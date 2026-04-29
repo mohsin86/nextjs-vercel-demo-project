@@ -1,0 +1,22 @@
+model User {
+  id          String   @id @default(cuid())
+
+  firstName   String
+  middleName  String?
+  lastName    String
+
+  email       String   @unique
+  phone       String   @unique
+
+  address     String
+  gender      String
+  jobType     String
+
+  hobbies     String   // store as comma-separated OR JSON string
+
+  password    String?  // optional (for future login system)
+  role        String   @default("user")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

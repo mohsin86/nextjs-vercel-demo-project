@@ -1,0 +1,21 @@
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Todo {
+  id          String   @id @default(cuid())
+
+  title       String
+  description String?
+
+  priority    Priority @default(MEDIUM)
+
+  completed   Boolean  @default(false)
+
+  userId      String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

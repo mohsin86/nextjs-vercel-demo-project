@@ -24,8 +24,9 @@
     ],
     "paths": {
       "@/*": [
-        "./*"
-      ]
+        "./*",
+      ],
+       "@/generated/prisma": ["./generated/prisma"]
     }
   },
   "include": [
