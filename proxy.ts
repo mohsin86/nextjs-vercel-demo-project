@@ -4,7 +4,7 @@ import { rateLimitMiddleware } from './middleware/rateLimit';
 import { userAuthMiddleware } from './middleware/userAuth';
 import { loggerMiddleware } from './middleware/logger';
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   // -------------------------
