@@ -3,6 +3,8 @@ import { jwtVerify } from 'jose';
 
 import { prisma } from '@/lib/db-instance/prisma'
 import { userRegisterSchema } from '@/lib/zod/userRegisterSchema';
+import bcrypt from 'bcryptjs';
+
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -63,6 +65,7 @@ export async function POST(req: Request) {
     }
 
     // 💾 SAVE TO DB
+    const hashedPassword = await bcrypt.hash(result.data.password, 10);
     const user = await prisma.user.create({
       data: {
         firstName:  result.data.firstName,
@@ -74,6 +77,8 @@ export async function POST(req: Request) {
         gender:     result.data.gender,
         jobType:    result.data.jobType,
         hobbies:    result.data.hobbies,
+        role: "user",
+        password: hashedPassword, 
       },
     });
 

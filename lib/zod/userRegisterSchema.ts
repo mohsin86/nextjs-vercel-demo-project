@@ -11,4 +11,8 @@ export const userRegisterSchema = z.object({
   jobType: z.string().min(1, "Job type is required"),
   hobbies: z.array(z.string()).min(1, "Select at least one hobby"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-});
+    confirmPassword: z.string().min(6),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });

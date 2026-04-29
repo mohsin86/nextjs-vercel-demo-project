@@ -39,7 +39,7 @@ const onSubmit = async (data: FormData) => {
     const tokenRes = await fetch('/api/auth/token');
     const { token } = await tokenRes.json();
 
-    const { confirmPassword, ...cleanData } = data; // not sending confirmPassword to API
+    //const { confirmPassword, ...cleanData } = data; // not sending confirmPassword to API
 
     const res = await fetch('/api/register', {
       method: 'POST',
@@ -47,7 +47,7 @@ const onSubmit = async (data: FormData) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(cleanData),
+      body: JSON.stringify(data),
     });
 
     const result = await res.json();
