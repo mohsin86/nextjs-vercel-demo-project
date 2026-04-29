@@ -3,7 +3,7 @@
 import Navigation from '@/components/Navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { userRegisterSchema } from '@/lib/schema';
+import { userRegisterSchema } from '@/lib/userRegisterSchema';
 import { z } from 'zod';
 import { useState } from 'react';
 
@@ -33,16 +33,34 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (data: FormData) => {
-    const res = await fetch('/api/contact?API_KEY=123456', {
+  try {
+    // 1️⃣ get short-lived JWT
+    const tokenRes = await fetch('/api/auth/token');
+    const { token } = await tokenRes.json();
+
+    // 2️⃣ submit form with JWT in header
+    const res = await fetch('/api/register', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,  // 🔐 JWT in header
+      },
       body: JSON.stringify(data),
     });
 
+    const result = await res.json();
+
     if (res.ok) {
       reset();
-      setSuccess('Form submitted successfully!');
+      setSuccess(result.message);
+    } else {
+      setSuccess('');
+      console.error(result.message);
     }
-  };
+  } catch (error) {
+    console.error('Submit error:', error);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-100">
