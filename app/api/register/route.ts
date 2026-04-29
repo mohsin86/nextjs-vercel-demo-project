@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
-import { PrismaClient } from '@/generated/prisma';
+
+import { prisma } from '@/lib/db-instance/prisma'
 import { userRegisterSchema } from '@/lib/userRegisterSchema';
 
-const prisma = new PrismaClient();
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function POST(req: Request) {

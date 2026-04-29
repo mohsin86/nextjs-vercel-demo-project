@@ -43,7 +43,7 @@ export default function RegisterPage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,  // 🔐 JWT in header
+        'Authorization': `Bearer ${token}`,  //  JWT in header
       },
       body: JSON.stringify(data),
     });
