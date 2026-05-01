@@ -3,8 +3,6 @@
 
 ***Final architecture****
 Defines models = schema.prisma
-Defines DB connection = prisma.config.ts (I have deleted it for now since it is not needed with prisma 5.0+)
-
 Creates reusable Prisma instance = lib/db-instance/prisma.ts
 
 **API routes/servicea use the reusable instance**

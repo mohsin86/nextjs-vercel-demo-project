@@ -1,3 +1,6 @@
+// File: app/login/page.tsx
+// This is the login page component for the Next.js application. It includes a form for users to enter their username and password, as well as a "Remember me" checkbox and a "Forgot password?" link. The form submits the login credentials to the backend API and handles the response accordingly.
+
 'use client';
 
 import { useState } from 'react';
@@ -36,10 +39,10 @@ export default function LoginPage() {
       }
 
       setTimeout(() => {
-        if (data.role === 'admin') {
-          router.push('/dashboard');
+        if (data.role === 'ADMIN') {
+          router.push('/backend/dashboard');
         } else {
-          router.push('/user-profile');
+          router.push('/user-profile/'+username); // pass username to profile page
         }
       }, 500);
 

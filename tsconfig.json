@@ -17,6 +17,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+     "forceConsistentCasingInFileNames": true,
     "plugins": [
       {
         "name": "next"
@@ -34,7 +35,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/api/users/route.js",
+    "app/api/front/users/route.js",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [

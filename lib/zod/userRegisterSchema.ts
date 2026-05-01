@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 export const userRegisterSchema = z.object({
+  username: z
+  .string()
+  .min(3)
+  .max(20)
+  .regex(/^[a-zA-Z0-9_]+$/, "Only letters, numbers, underscore allowed"),
   firstName: z.string().min(1, "First name is required"),
   middleName: z.string().optional(),
   lastName: z.string().min(1, "Last name is required"),

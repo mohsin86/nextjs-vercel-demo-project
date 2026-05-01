@@ -9,9 +9,10 @@ export async function verifyToken(token: string) {
   return payload;
 }
 
-export async function signToken(payload: any) {
+export async function signJwtToken(payload: any) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
     .setExpirationTime('1h')
     .sign(secret);
 }

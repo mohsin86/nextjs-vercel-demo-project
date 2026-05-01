@@ -1,3 +1,8 @@
+// File: proxy.ts
+// This file defines a proxy function that acts as a middleware for various routes in the Next.js application.
+// It handles rate limiting for API routes, user authentication for dashboard and user-profile routes, and admin route protection.
+// It also includes logging for all requests.
+
 import { NextRequest, NextResponse } from 'next/server';
 import { authMiddleware } from './middleware/auth';
 import { rateLimitMiddleware } from './middleware/rateLimit';
@@ -34,7 +39,7 @@ export async function proxy(req: NextRequest) {
   // dashboard/user-profile
   // -------------------------
   if (
-    path.startsWith('/dashboard') ||
+    path.startsWith('/backend') ||
     path.startsWith('/user-profile')
   ) {
     const userResponse = await userAuthMiddleware(req);
@@ -68,8 +73,7 @@ export async function proxy(req: NextRequest) {
 export const config = {
   matcher: [
     //'/api/:path*',
-    '/dashboard/:path*',
-    '/user-profile/:path*',
-    '/admin/:path*',
+    '/backend/:path*',
+    '/user-profile/:path*'
   ],
 };

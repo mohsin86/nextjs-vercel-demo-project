@@ -18,26 +18,30 @@ datasource db {
 model User {
   id          String   @id @default(cuid())
 
-  firstName   String
+  username    String   @unique
+  firstName   String?
   middleName  String?
   lastName    String
 
   email       String   @unique
-  phone       String   @unique
+  phone       String?  @unique
 
-  address     String
-  gender      String
-  jobType     String
+  address     String?
+  gender      String?
+  jobType     String?
 
-  hobbies     String[]   
+  hobbies     String[] @default([])   // ✅ FIXED
 
-  password    String?  // optional (for future login system)
-  role        String   @default("user")
+  password    String?
+  role        String   @default("USER")
 
-  resetToken        String?   
-  resetTokenExpiry  DateTime? 
+  profileImage String?
 
-  todos       Todo[]
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+
+  todos       Todo[]               // ✅ FIXED
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -56,8 +60,16 @@ model Todo {
   description String?
   priority    Priority @default(MEDIUM)
   completed   Boolean  @default(false)
+  completedAt DateTime?
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model TaskFile {
+  id        String @id @default(cuid())
+  url       String
+  taskId    String
+  task      Todo   @relation(fields: [taskId], references: [id])
 }
