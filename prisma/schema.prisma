@@ -28,7 +28,7 @@ model User {
   gender  String?
   jobType String?
 
-  hobbies String[] @default([]) // ✅ FIXED
+  hobbies String[] @default([]) // FIXED
 
   password String?
   role     String  @default("USER")
@@ -38,7 +38,7 @@ model User {
   resetToken       String?
   resetTokenExpiry DateTime?
 
-  todos Todo[] // ✅ FIXED
+  todos Todo[] // FIXED
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,22 +52,37 @@ enum Priority {
 }
 
 model Todo {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   description String?
-  priority    Priority   @default(MEDIUM)
-  completed   Boolean    @default(false)
+  priority    Priority  @default(MEDIUM)
+  completed   Boolean   @default(false)
   completedAt DateTime?
-  userId      String
-  user        User       @relation(fields: [userId], references: [id])
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  taskFiles   TaskFile[]
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  files    TaskFile[] @relation("Todo_TaskFiles")
+  comments Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TaskFile {
-  id     String @id @default(cuid())
-  url    String
+  id  String @id @default(cuid())
+  url String
+
   taskId String
-  task   Todo   @relation(fields: [taskId], references: [id])
+  task   Todo   @relation("Todo_TaskFiles", fields: [taskId], references: [id])
+}
+
+model Comment {
+  id      String @id @default(cuid())
+  content String
+  todoId  String
+  todo    Todo   @relation(fields: [todoId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
