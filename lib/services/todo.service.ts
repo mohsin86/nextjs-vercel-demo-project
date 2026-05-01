@@ -1,13 +1,14 @@
 // File: lib/services/todo.service.ts
 
 import { prisma } from '@/lib/db-instance/prisma';
-import { Prisma } from '@prisma/client';
+//import { Prisma } from '@prisma/client';
+import { Priority } from '@prisma/client'
 
 // CREATE
 export async function createTodo(data: {
   title: string;
   description?: string;
-  priority: Prisma.Priority;
+  priority: Priority.MEDIUM;
   userId: string;
 }) {
   return prisma.todo.create({
@@ -54,7 +55,7 @@ export async function updateTodo(
   data: Partial<{
     title: string;
     description: string;
-    priority: Prisma.Priority;
+    priority: Priority.MEDIUM;
     completed: boolean;
     userId: string;
   }>
