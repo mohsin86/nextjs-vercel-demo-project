@@ -8,7 +8,7 @@ import { Priority } from '@prisma/client'
 export async function createTodo(data: {
   title: string;
   description?: string;
-  priority: Priority.MEDIUM;
+  priority: Priority;
   userId: string;
 }) {
   return prisma.todo.create({
@@ -55,7 +55,7 @@ export async function updateTodo(
   data: Partial<{
     title: string;
     description: string;
-    priority: Priority.MEDIUM;
+    priority: Priority;
     completed: boolean;
     userId: string;
   }>
