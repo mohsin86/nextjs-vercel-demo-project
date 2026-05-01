@@ -8,6 +8,7 @@ import Navigation from '@/components/navigationFrontEnd';
 import TodoItem from '../components/TodoItem';
 import AddTodoForm from '../components/AddTodoForm';
 
+import { useUserByUsername } from '@/lib/hooks/front/useUserByUsername';
 
 type Todo = {
   id: string;
@@ -31,8 +32,6 @@ type User = {
   hobbies?: string[] | null;
 };
 
-
-
 type Props = {
   params: Promise<{
     username: string;
@@ -44,9 +43,14 @@ export default function UserProfilePage({ params }: Props) {
   const resolvedParams = use(params);
   const username = resolvedParams.username;
 
-  const [user, setUser] = useState<User | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  //const [user, setUser] = useState<User | null>(null);
+  const { data, isLoading, error } = useUserByUsername(username);
+  const userData = data?.user;
 
+
+
+  /*
+    const [err, setErr] = useState<string | null>(null);
     useEffect(() => {
        // if (!username) return;
         fetchUserData();
@@ -62,13 +66,13 @@ export default function UserProfilePage({ params }: Props) {
       const data = await res.json();
       setUser(data.user);
     };
-
+*/
   const handleLogout = async () => {
     await fetch('/api/logout', { method: 'POST' });
     router.push('/login');
   };
 
-  const fullName = `${user?.firstName || ''} ${user?.middleName || ''} ${user?.lastName || ''}`.trim();
+  const fullName = `${userData?.firstName || ''} ${userData?.middleName || ''} ${userData?.lastName || ''}`.trim();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -93,7 +97,7 @@ export default function UserProfilePage({ params }: Props) {
             </button>
 
             <div className="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold">
-              {user?.firstName?.charAt(0) || 'U'}
+              {userData?.firstName?.charAt(0) || 'U'}
             </div>
 
             <h1 className="text-xl font-bold mt-4">
@@ -101,21 +105,23 @@ export default function UserProfilePage({ params }: Props) {
             </h1>
 
             <p className="text-gray-500 text-sm">
-              {user?.email || 'No Email'}
+              {userData?.email || 'No Email'}
             </p>
 
-            {err && <p className="text-red-500 text-sm mt-2">{err}</p>}
+            {error && <p className="text-red-500 text-sm mt-2">{error.message}</p>}
+            {isLoading && <p className="text-gray-500 text-sm mt-2">Data Retriving...</p>}
+
           </div>
 
           {/* BASIC INFO */}
           <div className="mt-6 space-y-3 text-sm">
 
-            <Info label="Username" value={user?.username} />
-            <Info label="Email" value={user?.email} />
-            <Info label="Phone" value={user?.phone} />
-            <Info label="Address" value={user?.address} />
-            <Info label="Gender" value={user?.gender} />
-            <Info label="Job Type" value={user?.jobType} />
+            <Info label="Username" value={userData?.username} />
+            <Info label="Email" value={userData?.email} />
+            <Info label="Phone" value={userData?.phone} />
+            <Info label="Address" value={userData?.address} />
+            <Info label="Gender" value={userData?.gender} />
+            <Info label="Job Type" value={userData?.jobType} />
 
           </div>
 
@@ -123,8 +129,8 @@ export default function UserProfilePage({ params }: Props) {
           <div className="mt-6">
             <h2 className="font-semibold text-gray-700">Hobbies</h2>
             <div className="flex flex-wrap gap-2 mt-2">
-              {user?.hobbies?.length ? (
-                user.hobbies.map((hobby, i) => (
+              {userData?.hobbies?.length ? (
+                userData.hobbies.map((hobby: string, i: number) => (
                   <span
                     key={i}
                     className="bg-gray-200 px-3 py-1 rounded-full text-xs"
@@ -142,17 +148,15 @@ export default function UserProfilePage({ params }: Props) {
           <div className="mt-6">
                 <h2 className="font-semibold text-gray-700">Todos</h2>
 
-
-
                 <div className="mt-2 space-y-2">
-                  {user?.todos?.length ? (
-                    user.todos.map((todo) => (
+                  {userData?.todos?.length ? (
+                    userData.todos.map((todo: Todo) => (
                       <TodoItem
                         key={todo.id}
                         id={todo.id}
                         title={todo.title}
                         completed={todo.completed}
-                        onUpdate={fetchUserData}
+                        onUpdate={() => {}}
                       />
                     ))
                   ) : (
