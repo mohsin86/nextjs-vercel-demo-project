@@ -1,6 +1,8 @@
-# 🚀 Next.js Full Stack User Management System
+# 🚀 SaaS User Management & Task System (Next.js + Prisma + PostgreSQL)
 
-A full-stack web application built with **Next.js, Prisma, PostgreSQL, and JWT authentication**, featuring user registration, authentication, and admin-level management features.
+A full-stack **role-based SaaS-style application** built with **Next.js (App Router), Prisma, PostgreSQL, and JWT authentication** , featuring secure authentication, role-based dashboards, and scalable task management architecture.
+
+This project simulates a real-world SaaS system with Admin-controlled task assignment and user task lifecycle management.
 
 ---
 
@@ -10,65 +12,115 @@ A full-stack web application built with **Next.js, Prisma, PostgreSQL, and JWT a
 
 ---
 
-## 📌 Features
+## 🔐 Demo Credentials
+
+### 🛠️ Admin Login
+- Username: `admin`
+- Password: `123456`
+
+### 👤 User Login
+- Username: `anik`
+- Password: `12345`
+
+Both roles can log in via:
+👉 `/login`
+
+After login:
+- **Admin → Backend Dashboard**
+- **User → Frontend Profile Dashboard**
+
+---
+
+## 📌 Core Features
 
 ### 👤 User Features
-- User registration with validation (React Hook Form + Zod)
-- Secure login with JWT authentication
-- Password hashing (bcrypt)
-- Forgot password / reset password flow
-- Profile management
+- Secure authentication (JWT-based)
+- Profile dashboard
+- View assigned tasks (Todos)
+- Update task status (Pending → Completed)
+- View profile details (hobbies, job type, etc.)
 
 ---
 
 ### 🛠️ Admin Features
-After admin login, the admin can:
+- Full user management (CRUD)
+- Assign tasks (Todos) to users
+- Monitor task completion status
+- Centralized backend dashboard
+- Role-based access control (RBAC)
 
-- 👥 Manage users (view, create, update, delete)
-- ✅ Manage todos assigned to users
-- 🔐 Change user passwords securely
-- 📊 Access full system data control panel
+---
+
+## 🧠 SaaS Workflow
+Admin → Creates Task → Assigns to User → User Updates Status → Admin Monitors Progress
+
 
 ---
 
 ## 🔐 Authentication & Security
-- JWT-based authentication system
-- Protected API routes
-- Password hashing using bcrypt
+
+- JWT authentication (httpOnly cookies)
 - Role-based access control (Admin / User)
+- Protected routes (middleware-based)
+- Password hashing using bcrypt
+- Auto logout on invalid/expired token
 
 ---
 
 ## 🧰 Tech Stack
 
-- **Frontend:** Next.js (App Router), React, Tailwind CSS
-- **Backend:** Next.js API Routes
-- **Database:** PostgreSQL
-- **ORM:** Prisma
-- **Auth:** JWT (jose)
-- **Validation:** Zod + React Hook Form
+### Frontend
+- Next.js (App Router)
+- React
+- Tailwind CSS
+
+### Backend
+- Next.js API Routes
+- Prisma ORM
+
+### Database
+- PostgreSQL
+
+### Auth & Security
+- JWT (jose)
+- bcrypt
+- Middleware-based route protection
+
+### Validation
+- Zod
+- React Hook Form
 
 ---
 
 ## 🗄️ Database Models
 
 - User
-- Todo
-- Role-based access system
+- Todo (Task Management)
+- Comment System *(in development)*
+- File Attachments *(in development)*
+
+---
+
+## 🚧 In Progress Features
+
+- 💬 Comment system on tasks (multi-comment support)
+- 📎 File attachment system (proof-based task updates)
+- 📊 Advanced analytics dashboard
+- 🔔 Notifications system
 
 ---
 
 ## ⚙️ Setup Instructions
 
 ```bash
-# install dependencies
+# Install dependencies
 npm install
 
-# generate prisma client
+# Generate Prisma client
 npx prisma generate
 
-# run migrations
+# Run database migrations
 npx prisma migrate dev
 
-# start development server
+# Start development server
 npm run dev
