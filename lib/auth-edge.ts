@@ -1,32 +1,28 @@
-// file: lib/auth-edge.ts
-// This file contains utility functions for handling JWT authentication in a Next.js application. It provides functions to verify and sign JWT tokens using the 'jose' library. The verifyToken function checks the validity of a token and returns the decoded payload if valid, while the signJwtToken function creates a new JWT token with a specified payload and expiration time. These functions are used in API routes and frontend components to manage user authentication and session handling.
-
 import { jwtVerify, SignJWT } from 'jose';
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || 'my_secret_key'
 );
 
-// VERIFY TOKEN (simple)
-export async function verifyToken(token: string) {
+// ✅ future-ready role (no hard restriction now)
+export type JwtPayload = {
+  id: string;
+  username: string;
+  role: string | null; // 👈 flexible for later ENV upgrade
+};
+
+// VERIFY TOKEN
+export async function verifyToken(token: string): Promise<JwtPayload | null> {
   try {
     const { payload } = await jwtVerify(token, secret);
-    return payload as {
-      id: string;
-      username: string;
-      role: string;
-    };
+    return payload as JwtPayload;
   } catch {
-    return null; // invalid / expired
+    return null;
   }
 }
 
-//  SIGN TOKEN (simple)
-export async function signJwtToken(payload: {
-  id: string;
-  username: string;
-  role: string;
-}) {
+// SIGN TOKEN
+export async function signJwtToken(payload: JwtPayload) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('1h')

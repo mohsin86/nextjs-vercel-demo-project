@@ -44,10 +44,15 @@ export default function UserProfilePage({ params }: Props) {
   const resolvedParams = use(params);
   const username = resolvedParams.username;
 
+
   // since already stored in login route, we can directly access here without fetching again, but i am using custom hook for fetching user data to show latest data if any update happens in profile page, you can remove custom hook and use global state if you want to show data stored in global state only without fetching again
   // Not needed this line if storing user data using useEffect in front ened
-const user = useUserStore((state) => state.user);  
-const hydrateUser = useUserStore((state) => state.hydrateUser);
+
+  const user = useUserStore((state) => state.user);  
+  const hydrateUser = useUserStore((state) => state.hydrateUser);
+  useEffect(() => {
+    hydrateUser();
+  }, [hydrateUser]);
 
   // USING CUSTOM HOOK react-query
   const { data, isLoading, error } = useUserByUsername(username);
@@ -66,9 +71,7 @@ const hydrateUser = useUserStore((state) => state.hydrateUser);
 // }, [data, setUser]);
 
 
-useEffect(() => {
-  hydrateUser();
-}, [hydrateUser]);
+
   /*
    // this is for fetching user data without using custom hook and global state
    const [user, setUser] = useState<User | null>(null);
