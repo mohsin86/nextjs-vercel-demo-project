@@ -14,7 +14,7 @@ type User = {
   username: string;
   fullName?: string;
   email?: string;
-  number?: string;
+  phone?: string;
   role: string;
 };
 
@@ -55,7 +55,7 @@ export const useUserStore = create<UserStore>((set) => ({
           username: data.user.username,
           fullName: data.user.fullName,
           email: data.user.email,
-          number: data.user.number,
+          phone: data.user.phone,
           role: data.user.role,
         },
       });

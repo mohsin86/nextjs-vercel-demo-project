@@ -1,6 +1,9 @@
 import Link from 'next/link';
+import {useUserStore} from '@/lib/store/useUserStore';
 
 export default function NavigationFronEnd() {
+  const user = useUserStore((state) => state.user);
+
   return (
     <nav className="flex items-center justify-between">
 
@@ -18,6 +21,12 @@ export default function NavigationFronEnd() {
       </ul>
 
       {/* RIGHT AUTH BUTTONS (NEW ONLY) */}
+      {user?.fullName ? (
+        <div className="flex items-center gap-4">
+          <span className="text-gray-700">Hello, {user.fullName?.toLocaleUpperCase()}</span>
+        </div>
+      ) : (
+        
       <div className="flex gap-3">
 
         <Link
@@ -35,6 +44,7 @@ export default function NavigationFronEnd() {
         </Link>
 
       </div>
+      )}  
 
     </nav>
   );

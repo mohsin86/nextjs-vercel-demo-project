@@ -35,7 +35,7 @@ export async function GET(req: Request) {
         middleName: true,
         lastName: true,
         email: true,
-        number: true,
+        phone: true,
         role: true,
       },
     });
@@ -50,7 +50,7 @@ export async function GET(req: Request) {
         username: user.username,
         fullName: `${user.firstName || ''} ${user.middleName || ''} ${user.lastName || ''}`.trim(),
         email: user.email,
-        number: user.number,
+        phone: user.phone,
         role: user.role,
       },
     });
