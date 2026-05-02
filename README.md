@@ -1,253 +1,167 @@
-# 🧠 DEV QUICK GUIDE (Zod + React Query + Zustand + Prisma)
+# 🚀 SaaS User Management & Task System (Next.js + Prisma + PostgreSQL)
 
-A simple reference for daily development.
+A full-stack **role-based SaaS-style application** built with **Next.js (App Router), Prisma, PostgreSQL, JWT authentication, Zustand, and React Query**, featuring secure authentication, role-based dashboards, and scalable task management architecture.
 
----
-
-# 🧩 1. ZOD (Validation)
-
-## 📌 When to use
-- Validate forms (login, register, create todo)
-- Validate API request body
-
-## ✅ Example
-
-```ts
-import { z } from 'zod';
-
-export const userSchema = z.object({
-  username: z.string().min(3),
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-```
-
-## ✅ Validate data
-
-```ts
-const result = userSchema.safeParse(data);
-
-if (!result.success) {
-  console.log(result.error);
-}
-```
-
-## 🔥 With React Hook Form
-
-```ts
-useForm({
-  resolver: zodResolver(userSchema),
-});
-```
+This project simulates a real-world SaaS system with Admin-controlled task assignment and user task lifecycle management.
 
 ---
 
-# ⚡ 2. REACT QUERY (Server State)
+## 🌐 Live Demo
 
-## 📌 Use for:
-- API data (users, todos, profile)
-- Fetching + caching
-- Mutations (create/update/delete)
+👉 https://nextjs-vercel-demo-project.vercel.app/
 
 ---
 
-## ✅ Basic Query
+## 🔐 Demo Credentials
 
-```ts
-import { useQuery } from '@tanstack/react-query';
+### 🛠️ Admin Login
+- Username: admin
+- Password: 123456
 
-const { data, isLoading } = useQuery({
-  queryKey: ['user', username],
-  queryFn: () => fetch(`/api/user/${username}`).then(res => res.json()),
-});
-```
+### 👤 User Login
+- Username: anik
+- Password: 12345
 
----
+Both roles can log in via:
+👉 /login
 
-## 🔄 Mutation (Update / Create)
-
-```ts
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-const queryClient = useQueryClient();
-
-const mutation = useMutation({
-  mutationFn: (data) =>
-    fetch('/api/todo', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }),
-
-  onSuccess: () => {
-    queryClient.invalidateQueries(['todos']);
-  },
-});
-```
+After login:
+- Admin → Backend Dashboard
+- User → Frontend Profile Dashboard
 
 ---
 
-## 🚨 Rules
-- ✅ Use for backend data only
-- ❌ Don’t store UI state here
+## 📌 Core Features
+
+### 👤 User Features
+- Secure authentication (JWT-based)
+- Profile dashboard
+- View assigned tasks (Todos)
+- Update task status (Pending → Completed)
+- View profile details (hobbies, job type, etc.)
 
 ---
 
-# 🧠 3. ZUSTAND (Client State)
-
-## 📌 Use for:
-- Auth state
-- UI state (modal, sidebar)
-- Temporary state
-
----
-
-## ✅ Store Example
-
-```ts
-import { create } from 'zustand';
-
-export const useAuthStore = create((set) => ({
-  user: null,
-
-  setUser: (user) => set({ user }),
-
-  logout: () => {
-    fetch('/api/logout', { method: 'POST' });
-    set({ user: null });
-  },
-}));
-```
+### 🛠️ Admin Features
+- Full user management (CRUD)
+- Assign tasks (Todos) to users
+- Monitor task completion status
+- Centralized backend dashboard
+- Role-based access control (RBAC)
 
 ---
 
-## ✅ Use in Component
+## 🧠 SaaS Workflow
 
-```ts
-const { user, logout } = useAuthStore();
-```
+Admin → Creates Task → Assigns to User → User Updates Status → Admin Monitors Progress
 
 ---
 
-## 🚨 Rules
-- ✅ Use for frontend state
-- ❌ Don’t store API data here
+## 🔐 Authentication & Security
+
+- JWT authentication (httpOnly cookies)
+- Role-based access control (Admin / User)
+- Protected routes (middleware-based)
+- Password hashing using bcrypt
+- Auto logout on invalid/expired token
 
 ---
 
-# 🗄️ 4. PRISMA (Database ORM)
+## 🧰 Tech Stack
 
-## 📌 Use for:
-- Database queries
-- Relations (User → Todo)
+### Frontend
+- Next.js (App Router)
+- React
+- Tailwind CSS
+- Zustand (Global State Management)
+- React Query (Server State Management)
+
+### Backend
+- Next.js API Routes
+- Prisma ORM
+
+### Database
+- PostgreSQL
+
+### Auth & Security
+- JWT (jose)
+- bcrypt
+- Middleware-based route protection
+
+### Validation
+- Zod
+- React Hook Form
 
 ---
 
-## ✅ Example Model
+## 🗄️ Database Models
 
-```prisma
-model User {
-  id       String @id @default(cuid())
-  username String @unique
-  todos    Todo[]
-}
+- User
+- Todo (Task Management)
+- Comment System *(in development)*
+- File Attachments *(in development)*
 
-model Todo {
-  id     String @id @default(cuid())
-  title  String
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-}
+---
+
+## 🚧 In Progress Features
+
+- 💬 Comment system on tasks (multi-comment support)
+- 📎 File attachment system (proof-based task updates)
+- 📊 Advanced analytics dashboard
+- 🔔 Notifications system
+
+---
+
+## ⚙️ Setup Instructions
+
+```bash
+# Install dependencies
+npm install
+
+# Generate Prisma client
+npx prisma generate
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server
+npm run dev
 ```
 
 ---
 
-## ✅ Query Example
+## 📦 Production Build
 
-```ts
-const user = await prisma.user.findUnique({
-  where: { username },
-  include: { todos: true },
-});
+```bash
+npm run build
+npm start
 ```
 
 ---
 
-## ✅ Create
+## 🧱 Architecture Overview
 
-```ts
-await prisma.todo.create({
-  data: {
-    title: 'New Task',
-    userId,
-  },
-});
-```
+Frontend (Next.js)
+→ Zustand (UI State)
+→ React Query (Server State)
+→ API Routes
+→ Prisma
+→ PostgreSQL Database
 
 ---
 
-## 🚨 Common Errors
+## 📌 Notes
 
-- ❌ "undefined in where" → param missing
-- ❌ relation error → missing opposite relation
-- ❌ enum error → duplicate migrations
-
----
-
-# 🧱 HOW EVERYTHING CONNECTS
-
-```
-Frontend (React)
-   ↓
-React Query → API → Prisma → DB
-   ↑
-Zustand (UI State)
-```
+- Zustand handles UI/global state
+- React Query handles server caching and API data
+- Prisma handles all database operations
+- JWT stored in httpOnly cookies for security
 
 ---
 
-# 🔥 BEST PRACTICE SUMMARY
+## 🚀 Future Improvements
 
-| Tool          | Use for                  |
-|---------------|------------------------|
-| Zod           | Validation             |
-| React Query   | API data (server state)|
-| Zustand       | UI / Auth state        |
-| Prisma        | Database               |
-
----
-
-# ⚠️ GOLDEN RULES
-
-- ❌ Don’t use Zustand for API data  
-- ❌ Don’t use React Query for UI state  
-- ✅ Always validate with Zod  
-- ✅ Keep Prisma logic in services  
-
----
-
-# 🚀 QUICK PATTERN (REAL FLOW)
-
-### Create Todo
-
-1. Validate (Zod)
-2. Call API (React Query mutation)
-3. Save (Prisma)
-4. Refresh UI (invalidateQueries)
-
----
-
-# 🧪 DEBUG CHECKLIST
-
-- API not working? → check `res.ok`
-- Prisma error? → check `where` values
-- State not updating? → check query invalidation
-- Auth issue? → check cookie/token
-
----
-
-# 📌 FUTURE EXTENSIONS
-
-- Comments system
-- File upload (task proof)
-- Notifications
-- Real-time updates (WebSockets)
+- Real-time chat system
+- WebSocket notifications
+- Advanced admin analytics dashboard
+- File upload with S3 integration
