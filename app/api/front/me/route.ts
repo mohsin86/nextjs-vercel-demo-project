@@ -1,3 +1,6 @@
+// file: app/api/front/me/route.ts
+// This API route is responsible for fetching the currently authenticated user's information. It verifies the JWT token from the cookies, retrieves the user data from the database, and returns it in a structured format. This route is used by the frontend to get the user's profile information and maintain the user's session.
+
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db-instance/prisma';
 import { verifyToken } from '@/lib/auth-edge';
@@ -32,6 +35,7 @@ export async function GET(req: Request) {
         middleName: true,
         lastName: true,
         email: true,
+        number: true,
         role: true,
       },
     });
@@ -46,6 +50,7 @@ export async function GET(req: Request) {
         username: user.username,
         fullName: `${user.firstName || ''} ${user.middleName || ''} ${user.lastName || ''}`.trim(),
         email: user.email,
+        number: user.number,
         role: user.role,
       },
     });
