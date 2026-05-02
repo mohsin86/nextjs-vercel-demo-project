@@ -1,3 +1,7 @@
+// file: components/navigationFrontEnd.tsx
+
+'use client';
+
 import Link from 'next/link';
 import {useUserStore} from '@/lib/store/useUserStore';
 
