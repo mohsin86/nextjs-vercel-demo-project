@@ -61,10 +61,19 @@ export async function POST(req: Request) {
       role: user.role,
     });
 
-    const response = NextResponse.json({
-      message: 'Login successful',
-      role: user.role,
-    });
+
+
+    const response =  NextResponse.json({
+        message: 'Login successful',
+        user: {
+          id: user.id,
+          username: user.username,
+          role: user.role,
+          fullName: `${user.firstName || ''} ${user.middleName || ''} ${user.lastName || ''}`.trim(),
+        }
+      });
+
+    
 
     // 🍪 Set cookie
     response.cookies.set('token', token, {

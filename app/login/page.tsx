@@ -3,8 +3,9 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/lib/store/useUserStore';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,6 +14,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false); // 🔥 NEW
   const [loading, setLoading] = useState(false);
+  
+  // const setUser = useUserStore((state) => state.setUser);
+  // const hydrateUser = useUserStore((state) => state.hydrateUser);
+
+  //   useEffect(() => {
+  //         hydrateUser();
+  //   }, [hydrateUser]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +47,7 @@ export default function LoginPage() {
       }
 
       setTimeout(() => {
-        if (data.role === 'ADMIN') {
+        if (data.user.role === 'ADMIN') {
           router.push('/backend/dashboard');
         } else {
           router.push('/user-profile/'+username); // pass username to profile page

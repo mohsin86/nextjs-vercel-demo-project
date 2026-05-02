@@ -9,6 +9,7 @@ import TodoItem from '../components/TodoItem';
 import AddTodoForm from '../components/AddTodoForm';
 
 import { useUserByUsername } from '@/lib/hooks/front/useUserByUsername';
+import { useUserStore } from '@/lib/store/useUserStore';
 
 type Todo = {
   id: string;
@@ -43,13 +44,34 @@ export default function UserProfilePage({ params }: Props) {
   const resolvedParams = use(params);
   const username = resolvedParams.username;
 
-  //const [user, setUser] = useState<User | null>(null);
+  // since already stored in login route, we can directly access here without fetching again, but i am using custom hook for fetching user data to show latest data if any update happens in profile page, you can remove custom hook and use global state if you want to show data stored in global state only without fetching again
+  // Not needed this line if storing user data using useEffect in front ened
+const user = useUserStore((state) => state.user);  
+const hydrateUser = useUserStore((state) => state.hydrateUser);
+
+  // USING CUSTOM HOOK react-query
   const { data, isLoading, error } = useUserByUsername(username);
   const userData = data?.user;
 
+//   // Below Global State using Zustand if using in frontend , Now i am implementing in login rout
+//   const setUser = useUserStore((state) => state.setUser);
+//   useEffect(() => {
+//   if (userData) {
+//     //setUser(userData);
+//     setUser({
+//       username: userData.username, 
+//       fullName: `${userData.firstName || ''} ${userData.middleName || ''} ${userData.lastName || ''}`.trim()
+//     });
+//   }
+// }, [data, setUser]);
 
 
+useEffect(() => {
+  hydrateUser();
+}, [hydrateUser]);
   /*
+   // this is for fetching user data without using custom hook and global state
+   const [user, setUser] = useState<User | null>(null);
     const [err, setErr] = useState<string | null>(null);
     useEffect(() => {
        // if (!username) return;
@@ -101,7 +123,7 @@ export default function UserProfilePage({ params }: Props) {
             </div>
 
             <h1 className="text-xl font-bold mt-4">
-              {fullName || 'No Name'}
+              {user ? `Welcome ${user.fullName}` : 'Not logged in'}
             </h1>
 
             <p className="text-gray-500 text-sm">
